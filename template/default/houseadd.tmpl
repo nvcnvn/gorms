@@ -1,0 +1,143 @@
+{{define "page"}}
+{{if .Error}}
+<h1>{{.Error}}</h1>
+{{end}}
+<form action="/data/submit.html" method="POST">
+	<p>
+		Tổ: <input type="text" name="Group" /> Ấp: <input type="text" name="Block" /> 
+		Địa chỉ: <input class="contact" type="text" name="Address" />
+	</p>
+	<table>
+		<tr>
+			<td>STT</td>
+			<td>Quan hệ</td>
+			<td>Họ và Tên</td>
+			<td>Giới tính</td>
+			<td>Năm sinh</td>
+			<td>Tổ chức</td>
+			<td>Trình độ</td>
+			<td>Chuyên môn</td>
+			<td>Đang đi học</td>
+			<td>Đang đi làm</td>
+			<td>Có thu nhập</td>
+			<td>Sức khỏe</td>
+			<td>Tham gia BHYT</td>
+			<td>Nguyện vọng</td>
+			<td>Ghi chú</td>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>
+				<select name="Roles">
+	{{range $i, $v := .Roles}}
+					<option value="{{$i}}">{{$v}}</option>
+	{{end}}
+				</select>			
+			</td>
+			<td>
+				<input class="contact" type="text" name="FullName" />
+			</td>
+			<td>
+				<select name="Gender" size="2">
+					<option value="0" selected>Nam</option>
+					<option value="1">Nữ</option>
+				</select>
+			</td>
+			<td>
+				<input class="contact" type="text" id="Birth" name="Birth" />
+			</td>
+			<td>
+				<select name="Orgs" multiple>
+					<option value="none">Không tham gia</option>
+	{{range $i, $v := .Orgs}}
+					<option value="{{$i}}">{{$v}}</option>
+	{{end}}
+				</select>			
+			</td>
+			<td>
+				<select name="Quals">
+	{{range $i, $v := .Quals}}
+					<option value="{{$i}}">{{$v}}</option>
+	{{end}}
+				</select>
+			</td>
+			<td>
+				<input type="text" name="Area" />
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="AttendingSchool" />
+					<table class="ui-helper-hidden">
+						<tr>
+							<td>Lớp</td>
+							<td>Trường</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="SchoolTitle" />
+							</td>
+							<td>
+								<input type="text" name="School" />
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="Working" />
+					<table class="ui-helper-hidden">
+						<tr>
+							<td>Công việc</td>
+							<td>Địa chỉ</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="WorkTitle" />
+							</td>
+							<td>
+								<input type="text" name="Office" />
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="Incomes" />
+					<table class="ui-helper-hidden">
+						<tr>
+							<td>Thu nhập</td>
+							<td>Nguồn thu</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="Amount" />
+							</td>
+							<td>
+								<input type="text" name="Form" />
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td>
+				<input type="text" name="Health" />
+			</td>
+			<td>
+				<input type="text" name="HI" />
+			</td>
+			<td>
+				<input type="text" name="Desire" />
+			</td>
+			<td>
+				<input type="text" name="Note" />
+			</td>
+		</tr>
+	</table>
+	<p style="padding-top: 15px">
+		<span>&nbsp;</span>
+		<input class="submit" type="submit" name="submit" value="submit">
+	</p>
+</form>
+<script>
+$("#Birth").datepicker({dateFormat:"dd/mm/yy"});
+$(document).on("change", ".open_table", function(){
+	$(this).next().toggle("fade");
+});
+</script>
+{{end}}

@@ -1,0 +1,150 @@
+{{define "page"}}
+{{if .Error}}
+<h1>{{.Error}}</h1>
+{{end}}
+<form action="/data/submit.html" method="POST">
+	<p>
+		Tổ: <input type="text" name="Group" value="{{.Person.HouseInfo.Group}}" />
+		Ấp: <input type="text" name="Block" value="{{.Person.HouseInfo.Block}}" /> 
+		Địa chỉ: <input class="contact" type="text" name="Address" value="{{.Person.HouseInfo.Address}}" />
+	</p>
+	<table>
+		<tr>
+			<td>Quan hệ</td>
+			<td>Họ và Tên</td>
+			<td>Giới tính</td>
+			<td>Năm sinh</td>
+			<td>Tổ chức</td>
+			<td>Trình độ</td>
+			<td>Chuyên môn</td>
+			<td>Đang đi học</td>
+			<td>Đang đi làm</td>
+			<td>Có thu nhập</td>
+			<td>Sức khỏe</td>
+			<td>Tham gia BHYT</td>
+			<td>Nguyện vọng</td>
+			<td>Ghi chú</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="Roles">
+	{{$p_role := .Person.Role}}
+	{{range $i, $v := .Roles}}
+					<option value="{{$i}}"{{if equal $i $p_role}} selected{{end}}>{{$v}}</option>
+	{{end}}
+				</select>			
+			</td>
+			<td>
+				<input class="contact" type="text" name="FullName" value="{{.Person.FullName}}" />
+			</td>
+			<td>
+				<select name="Gender" size="2">
+					<option value="0" selected>Nam</option>
+					<option value="1"{{if .Person.Gender}} selected{{end}}>Nữ</option>
+				</select>
+			</td>
+			<td>
+				<input class="contact" type="text" id="Birth" name="Birth" value="{{.Person.Birth.Format "02/01/2006"}}" />
+			</td>
+			<td>
+				<select id="Orgs" name="Orgs" multiple>
+					<option value="none">Không tham gia</option>
+	{{range $i, $v := .Orgs}}
+					<option value="{{$i}}">{{$v}}</option>
+	{{end}}
+				</select>			
+			</td>
+			<td>
+				<select name="Quals">
+	{{$p_qual := .Person.Quals}}
+	{{range $i, $v := .Quals}}
+					<option value="{{$i}}"{{if equal $i $p_qual}} selected{{end}}>{{$v}}</option>
+	{{end}}
+				</select>
+			</td>
+			<td>
+				<input type="text" name="Area" value="{{.Person.Area}}" />
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="AttendingSchool"{{if .Person.AttendingSchool}} checked{{end}} />
+					<table{{if not .Person.AttendingSchool}} class="ui-helper-hidden"{{end}}>
+						<tr>
+							<td>Lớp</td>
+							<td>Trường</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="SchoolTitle" value="{{.Person.Class.Title}}" />
+							</td>
+							<td>
+								<input type="text" name="School" value="{{.Person.Class.School}}" />
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="Working"{{if .Person.Working}} checked{{end}} />
+					<table{{if not .Person.Working}} class="ui-helper-hidden"{{end}}>
+						<tr>
+							<td>Công việc</td>
+							<td>Địa chỉ</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="WorkTitle" value="{{.Person.Work.Title}}" />
+							</td>
+							<td>
+								<input type="text" name="Office" value="{{.Person.Work.Office}}" />
+							</td>
+						</tr>
+					</table>
+			</td>
+			<td>
+				<input class="open_table" type="checkbox" value="1" name="Incomes"{{if .Person.AvgIncome}} checked{{end}} />
+					<table{{if not .Person.AvgIncome}} class="ui-helper-hidden"{{end}}>
+						<tr>
+							<td>Thu nhập</td>
+							<td>Nguồn thu</td>
+						</tr>
+						{{range .Person.Incomes}}
+						<tr>
+							<td>
+								<input type="text" name="Amount" value="{{.Amount}}" />
+							</td>
+							<td>
+								<input type="text" name="Form" value="{{.From}}" />
+							</td>
+						</tr>
+						{{end}}
+					</table>
+			</td>
+			<td>
+				<input type="text" name="Health" value="{{.Person.Health}}" />
+			</td>
+			<td>
+				<input type="text" name="HI" value="{{.Person.HI}}" />
+			</td>
+			<td>
+				<input type="text" name="Desire" value="{{.Person.Desire}}" />
+			</td>
+			<td>
+				<input type="text" name="Note" value="{{.Person.Note}}" />
+			</td>
+		</tr>
+	</table>
+	<p style="padding-top: 15px">
+		<input type="hidden" name="house" value="{{.Person.HouseId.Hex}}" />
+		<input type="hidden" name="person" value="{{.Person.PersonId.Hex}}" />
+		<input class="submit" type="submit" name="submit" value="submit">
+	</p>
+</form>
+<script>
+{{range .Person.Orgs}}
+$("#Orgs option[value={{.Hex}}]").attr("selected","selected") ;
+{{end}}
+$("#Birth").datepicker({dateFormat:"dd/mm/yy"});
+$(document).on("change", ".open_table", function(){
+	$(this).next().toggle("fade");
+});
+</script>
+{{end}}

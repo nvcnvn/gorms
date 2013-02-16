@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>{{if .Title}}{{.Title}}{{end}}</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="/statics/css/ui-lightness/jquery-ui-1.10.0.custom.css" />
+  <link rel="stylesheet" href="/statics/css/print.css" media="print" />
+  <script src="/statics/js/jquery-1.9.0.js"></script>
+  <script src="/statics/js/jquery-ui-1.10.0.custom.min.js"></script>
+  <script src="/statics/js/jquery.validate.min.js"></script>
+  <script>
+	jQuery.validator.addMethod("dateITA", function (value, element) {
+		  var check = false;
+		  var re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+		  if (re.test(value)) {
+		      var adata = value.split('/');
+		      var gg = parseInt(adata[0], 10);
+		      var mm = parseInt(adata[1], 10);
+		      var aaaa = parseInt(adata[2], 10);
+		      var xdata = new Date(aaaa, mm - 1, gg);
+		      if ((xdata.getFullYear() === aaaa) && (xdata.getMonth() === mm - 1) && (xdata.getDate() === gg)) {
+		          check = true;
+		      } else {
+		          check = false;
+		      }
+		  } else {
+		      check = false;
+		  }
+		  return this.optional(element) || check;
+	}, "Please enter a correct date");
+	</script>
+  <style>
+  input[type=text] {
+    max-width:50px;
+  }
+  table {
+    border-spacing: 0;
+	border-collapse: collapse;
+  }
+  td {
+    vertical-align:bottom;
+	text-align: center;
+	border: 1px solid black;
+  }
+  option:checked {
+  	background-color: red;
+  }
+  .trbreak {padding:5px;border:none;}
+  </style>
+</head>
+
+<body>
+  <div id="main">
+  	{{template "page" .}}
+  	
+	</div>
+</body>
+</html>

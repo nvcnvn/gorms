@@ -1,0 +1,210 @@
+{{define "page"}}
+{{if .House}}
+{{$Host := index .House 0}}
+{{$Roles := .Roles}}
+{{$Quals := .Quals}}
+{{$Orgs := .Orgs}}
+<form action="/data/submit.html" method="POST">
+<table id="house_table">
+	<tr>
+		<td>STT</td>
+		<td>Quan hệ</td>
+		<td>Họ và Tên</td>
+		<td>Giới tính</td>
+		<td>Năm sinh</td>
+		<td>Tổ chức</td>
+		<td>Trình độ</td>
+		<td>Chuyên môn</td>
+		<td>Đang đi học</td>
+		<td>Đang đi làm</td>
+		<td>Có thu nhập</td>
+		<td>Sức khỏe</td>
+		<td>Tham gia BHYT</td>
+		<td>Nguyện vọng</td>
+		<td>Ghi chú</td>
+		<td></td>
+	</tr>
+	{{range $i, $v := .House}}
+	<tr>
+		<td>{{plus $i 1}}</td>
+		<td>{{index $Roles $v.Role}}</td>
+		<td>{{$v.FullName}}</td>
+		<td>{{if $v.Gender}}Nữ{{else}}Nam{{end}}</td>
+		<td>{{$v.Birth.Format "02/01/2006"}}</td>
+		<td>
+	{{range $o := .Orgs}}
+			<p>{{index $Orgs $o.Hex}}</p>
+	{{end}}		
+		</td>
+		<td>{{index $Quals $v.Quals}}</td>
+		<td>{{$v.Area}}</td>
+		<td>
+		{{if $v.AttendingSchool}}
+			<table>
+				<tr>
+					<td>{{$v.Class.Title}}</td>
+					<td>{{$v.Class.School}}</td>
+				</tr>
+			</table>
+		{{else}}
+		Khong
+		{{end}}
+		</td>
+		<td>
+		{{if $v.Working}}
+			<table>
+				<tr>
+					<td>{{$v.Work.Title}}</td>
+					<td>{{$v.Work.Office}}</td>
+				</tr>
+			</table>
+		{{else}}
+		Khong
+		{{end}}
+		</td>
+		<td>
+			{{if $v.AvgIncome}}
+			<table>
+				<tr>
+					<td>Thu nhap</td>
+					<td>Nguon thu</td>
+				</tr>
+				{{range $v.Incomes}}
+				<tr>
+					<td>{{.Amount}}</td>
+					<td>{{.From}}</td>
+				</tr>
+				{{end}}
+			</table>
+			{{else}}
+			0
+			{{end}}
+		</td>
+		<td>{{if $v.Health}}{{$v.Health}}{{else}}Tốt{{end}}</td>
+		<td>{{$v.HI}}</td>
+		<td>{{$v.Desire}}</td>
+		<td>{{$v.Note}}</td>
+		<td><a href="/data/edit.html?p={{$v.PersonId.Hex}}">Edit</a></td>
+	</tr>
+	{{end}}
+	<tr>
+		<td id="row_num">0</td>
+		<td>
+			<select name="Roles">
+	{{range $i, $v := .Roles}}
+				<option value="{{$i}}">{{$v}}</option>
+	{{end}}
+			</select>			
+		</td>
+		<td>
+			<input type="text" name="FullName" />
+		</td>
+		<td>
+			<select name="Gender" size="2">
+				<option value="0" selected>Nam</option>
+				<option value="1">Nữ</option>
+			</select>
+		</td>
+		<td>
+			<input type="text" id="Birth" name="Birth" />
+		</td>
+		<td>
+			<select name="Orgs" multiple>
+				<option value="none">Không tham gia</option>
+{{range $i, $v := .Orgs}}
+				<option value="{{$i}}">{{$v}}</option>
+{{end}}
+			</select>			
+		</td>
+		<td>
+			<select name="Quals">
+{{range $i, $v := .Quals}}
+				<option value="{{$i}}">{{$v}}</option>
+{{end}}
+			</select>
+		</td>
+		<td>
+			<input type="text" name="Area" />
+		</td>
+		<td>
+			<input class="open_table" type="checkbox" value="1" name="AttendingSchool" />
+				<table class="ui-helper-hidden">
+					<tr>
+						<td>Lớp</td>
+						<td>Trường</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="SchoolTitle" />
+						</td>
+						<td>
+							<input type="text" name="School" />
+						</td>
+					</tr>
+				</table>
+		</td>
+		<td>
+			<input class="open_table" type="checkbox" value="1" name="Working" />
+				<table class="ui-helper-hidden">
+					<tr>
+						<td>Công việc</td>
+						<td>Địa chỉ</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="WorkTitle" />
+						</td>
+						<td>
+							<input type="text" name="Office" />
+						</td>
+					</tr>
+				</table>
+		</td>
+		<td>
+			<input class="open_table" type="checkbox" value="1" name="Incomes" />
+				<table class="ui-helper-hidden">
+					<tr>
+						<td>Thu nhập</td>
+						<td>Nguồn thu</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="Amount" />
+						</td>
+						<td>
+							<input type="text" name="Form" />
+						</td>
+					</tr>
+				</table>
+		</td>
+		<td>
+			<input type="text" name="Health" />
+		</td>
+		<td>
+			<input type="text" name="HI" />
+		</td>
+		<td>
+			<input type="text" name="Desire" />
+		</td>
+		<td>
+			<input type="text" name="Note" />
+		</td>
+		<td>
+			<input type="hidden" name="house" value="{{$Host.PersonId.Hex}}" />
+			<input type="submit" value="Add" />
+		</td>
+	</tr>
+</table>
+</form>
+{{end}}
+<script>
+$("#Birth").datepicker({dateFormat:"dd/mm/yy"});
+$(document).on("change", ".open_table", function(){
+	$(this).next().toggle("fade");
+});
+function RowNum() {
+	$("#row_num").text($("#house_table").prop('rows').length - 1);
+}
+RowNum();
+</script>
+{{end}}

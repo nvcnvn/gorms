@@ -1,0 +1,264 @@
+{{define "page"}}
+{{$Roles := .Roles}}
+{{$Quals := .Quals}}
+{{$Orgs := .Orgs}}
+
+<div class="hideprint">
+	<form action="/data/" method="GET">
+		<table>
+			<tr>
+				<td rowspan="2">
+					<select name="orgs" multiple>
+						<option value="">Theo tổ chức</option>
+					{{range $i, $v := $Orgs}}
+						<option value="{{$i}}">{{$v}}</option>
+					{{end}}
+					</select>				
+				</td>
+				<td>
+					<select name="type">
+						<option value="0"{{if not .Flags.House}} selected{{end}}>Cá nhân</option>
+						<option value="1"{{if .Flags.House}} selected{{end}}>Gia đình</option>
+					</select>
+				</td>
+				<td>
+					<select name="role">
+						<option value="">Theo quan hệ</option>
+					{{if .Flags.Frole}}
+						{{$r := .Flags.Role}}
+						{{range $i, $v := $Roles}}
+						<option value="{{$i}}"{{if equal $i $r}} selected{{end}}>{{$v}}</option>
+						{{end}}
+					{{else}}
+						{{range $i, $v := $Roles}}
+						<option value="{{$i}}">{{$v}}</option>
+						{{end}}
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="attending">
+						<option value="">Theo học vấn</option>
+					{{if .Flags.Fattending}}
+						<option value="1"{{if .Flags.Attending}} selected{{end}}>Đang đi học</option>
+						<option value="0"{{if not .Flags.Attending}} selected{{end}}>Đang không đi học</option>
+					{{else}}
+						<option value="1">Đang đi học</option>
+						<option value="0">Đang không đi học</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="health">
+						<option value="">Theo sức khỏe</option>
+					{{if .Flags.Fhealth}}
+						<option value="1"{{if .Flags.Health}} selected{{end}}>Sức khỏe có vấn đề</option>
+						<option value="0"{{if not .Flags.Health}} selected{{end}}>Sức khỏe tốt</option>
+					{{else}}
+						<option value="1">Sức khỏe có vấn đề</option>
+						<option value="0">Sức khỏe tốt</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="note">
+						<option value="">Theo ghi chú</option>
+					{{if .Flags.Fnote}}
+						<option value="1"{{if .Flags.Note}} selected{{end}}>Có ghi chú</option>
+						<option value="0"{{if not .Flags.Note}} selected{{end}}>Không có ghi chú</option>
+					{{else}}
+						<option value="1">Có ghi chú</option>
+						<option value="0">Không có ghi chú</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					BHTY: <input type="number" name="hi"{{if .Flags.Fhi}} value="{{.Flags.Hi}}"{{end}} />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="gender">
+						<option value="">Theo giới tính</option>
+					{{if .Flags.Fgender}}
+						<option value="1"{{if .Flags.Gender}} selected{{end}}>Nữ</option>
+						<option value="0"{{if not .Flags.Gender}} selected{{end}}>Nam</option>
+					{{else}}
+						<option value="1">Nữ</option>
+						<option value="0">Nam</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="qual">
+						<option value="">Theo trình độ</option>
+					{{if .Flags.Fqual}}
+					{{$q := .Flags.Qual}}
+						{{range $i, $v := $Quals}}
+						<option value="{{$i}}"{{if equal $i $q}} selected{{end}}>{{$v}}</option>
+						{{end}}
+					{{else}}
+						{{range $i, $v := $Quals}}
+						<option value="{{$i}}">{{$v}}</option>
+						{{end}}
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="working">
+						<option value="">Theo công việc</option>
+					{{if .Flags.Fworking}}
+						<option value="1"{{if .Flags.Working}} selected{{end}}>Đang đi làm</option>
+						<option value="0"{{if not .Flags.Working}} selected{{end}}>Đang không đi làm</option>
+					{{else}}
+						<option value="1">Đang đi làm</option>
+						<option value="0">Đang không đi làm</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="desire">
+						<option value="">Theo nguyện vọng</option>
+					{{if .Flags.Fdesire}}
+						<option value="1"{{if .Flags.Desire}} selected{{end}}>Có nguyện vọng</option>
+						<option value="0"{{if not .Flags.Desire}} selected{{end}}>Không có nguyện vọng</option>
+					{{else}}
+						<option value="1">Có nguyện vọng</option>
+						<option value="0">Không có nguyện vọng</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					Thu nhập từ <input type="number" placeholder="Default Value" name="incomefrom"{{if .Flags.Incomefrom}} value="{{.Flags.Incomefrom}}"{{end}} />
+				</td>
+				<td>
+					đến <input type="number" name="incometo"{{if .Flags.Incometo}} value="{{.Flags.Incometo}}"{{end}} />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="sort_qual">
+						<option value="">Sap xep theo hoc van</option>
+					{{if .Flags.Squal}}
+						<option value="0"{{if not .Flags.Squaldesc}} selected{{end}}>Tang dan</option>
+						<option value="1"{{if .Flags.Squaldesc}} selected{{end}}>Giam dan</option>
+					{{else}}
+						<option value="0">Tang dan</option>
+						<option value="1">Giam dan</option>
+					{{end}}
+					</select>
+				</td>
+				<td>
+					<select name="sort_age">
+						<option value="">Sap xep theo do tuoi</option>
+					{{if .Flags.Sage}}
+						<option value="0"{{if not .Flags.Sagedesc}} selected{{end}}>Tang dan</option>
+						<option value="1"{{if .Flags.Sagedesc}} selected{{end}}>Giam dan</option>
+					{{else}}
+						<option value="0">Tang dan</option>
+						<option value="1">Giam dan</option>
+					{{end}}
+					</select>				
+				</td>
+				<td>
+					<select name="sort_income">
+						<option value="">Sap xep theo thu nhap</option>
+					{{if .Flags.Sincome}}
+						<option value="0"{{if not .Flags.Sincomedesc}} selected{{end}}>Tang dan</option>
+						<option value="1"{{if .Flags.Sincomedesc}} selected{{end}}>Giam dan</option>
+					{{else}}
+						<option value="0">Tang dan</option>
+						<option value="1">Giam dan</option>
+					{{end}}
+					</select>				
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<input type="submit" value="Find" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<table>
+	<tr>
+		<td>STT</td>
+		<td>To</td>
+		<td>Ap</td>
+		<td>Dia chi</td>
+		<td>Quan hệ</td>
+		<td>Họ và Tên</td>
+		<td>Giới tính</td>
+		<td>Năm sinh</td>
+		<td>Tổ chức</td>
+		<td>Trình độ</td>
+		<td>Chuyên môn</td>
+		<td>Đang đi học</td>
+		<td>Đang đi làm</td>
+		<td>Có thu nhập</td>
+		<td>Sức khỏe</td>
+		<td>Tham gia BHYT</td>
+		<td>Nguyện vọng</td>
+		<td>Ghi chú</td>
+		<td class="hideprint"></td>
+	</tr>
+	{{$housing := .Flags.House}}
+	{{range $i, $v := .Persons}}
+	<tr>
+		<td>{{plus $i 1}}</td>
+		<td>{{$v.HouseInfo.Group}}</td>
+		<td>{{$v.HouseInfo.Block}}</td>
+		<td>{{$v.HouseInfo.Address}}</td>
+		<td>{{index $Roles $v.Role}}</td>
+		<td>{{$v.FullName}}</td>
+		<td>{{if $v.Gender}}Nữ{{else}}Nam{{end}}</td>
+		<td>{{$v.Birth.Format "02/01/2006"}}</td>
+		<td>
+		{{range $o := .Orgs}}
+			<p>{{index $Orgs $o.Hex}}</p>
+		{{end}}		
+		</td>
+		<td>{{index $Quals $v.Quals}}</td>
+		<td>{{$v.Area}}</td>
+		<td>
+		{{if $v.AttendingSchool}}
+			{{$v.Class.Title}}. Truong: {{$v.Class.School}}
+		{{else}}
+		Khong
+		{{end}}
+		</td>
+		<td>
+		{{if $v.Working}}
+			{{$v.Work.Title}}. C.ty: {{$v.Work.Office}}
+		{{else}}
+		Khong
+		{{end}}
+		</td>
+		<td>
+			{{if $v.AvgIncome}}
+				{{$v.AvgIncome}}
+				{{range $v.Incomes}}
+					<p>» {{.Amount}}, {{.From}}</p>
+				{{end}}
+			</ul>
+			{{else}}
+			0
+			{{end}}
+		</td>
+		<td>{{if $v.Health}}{{$v.Health}}{{else}}Tốt{{end}}</td>
+		<td>{{$v.HI}}</td>
+		<td>{{$v.Desire}}</td>
+		<td>{{$v.Note}}</td>
+		<td class="hideprint"><a href="/data/edit.html?p={{$v.PersonId.Hex}}">Edit</a></td>
+	</tr>
+		{{$host := equal $v.PersonId $v.HouseId}}
+		{{if and $host $housing}}
+	<tr>
+		<td class="trbreak" colspan="20"></td>
+	</tr>
+		{{end}}
+	{{end}}
+</table>
+{{end}}
